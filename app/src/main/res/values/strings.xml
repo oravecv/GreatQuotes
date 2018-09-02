@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Great Quotes</string>
+
+    <!--quotes.xml strings -->
+    <string name="xml_root_element">quotes</string>
+    <string name="xml_quote_element">quote</string>
+
+    <string name="xml_gender_attribute">gender</string>
+    <string name="xml_first_name_attribute">firstName</string>
+    <string name="xml_last_name_attribute">lastName</string>
+
+    <string name="xml_gender_male">Male</string>
+    <string name="xml_gender_female">Female</string>
+
+
+</resources>
