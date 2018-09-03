@@ -23,73 +23,30 @@ public class App extends Application {
     private static final String KEY_XML_LOADED = "xml_loaded";
 
     private static final String DATABASE_NAME = "QUOTES_DATABASE";
-    private QuotesDatabase database;
 
+    private QuotesDatabase database;
     private List<Quote> quotesList;
-    private Quote randomQuote = null;
+    private Quote randomQuote;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        database = Room.databaseBuilder(getApplicationContext(), QuotesDatabase.class, DATABASE_NAME).build();
-
-        if (getSP().getBoolean(KEY_XML_LOADED, false) == false) {
-            new Thread(new XmlLoader()).start();
-        } else {
-           loadDatabase();
-        }
-
         INSTANCE = this;
-    }
-
-    class XmlLoader implements Runnable {
-
-        @Override
-        public void run() {
-
-            QuotesXmlParser parser = new QuotesXmlParser(getApplicationContext());
-            List<Quote> quotesListFromXml = null;
-            try {
-                quotesListFromXml = parser.getQuotesListFromXml();
-                Log.d(App.this.getClass().getSimpleName(), "quotesListFromXml.size() = " + quotesListFromXml.size());
-            } catch (IOException | XmlPullParserException e) {
-                showAlertDialog(e.getClass().getSimpleName(), e.getMessage());
-            }
-
-            if (quotesListFromXml != null) {
-                database.quoteDao().insertAll(quotesListFromXml);
-                getSP().edit().putBoolean(KEY_XML_LOADED, true).apply();
-
-            }
-        }
-
-    }
-
-    private void loadDatabase() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                quotesList = App.get().getDatabase().quoteDao().getAll();
-                Log.d(App.this.getClass().getSimpleName(), "quotesList.size() = " + quotesList.size());
-
-                if (quotesList.size() > 0) {
-                    randomQuote = quotesList.get(new Random().nextInt(quotesList.size()));
-                }
-
-            }
-        }).start();
-    }
-
-    private void showAlertDialog(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.create().show();
     }
 
     public static App get() {
         return INSTANCE;
+    }
+
+    public void loadData() {
+        database = Room.databaseBuilder(getApplicationContext(), QuotesDatabase.class, DATABASE_NAME).build();
+
+        if (getSP().getBoolean(KEY_XML_LOADED, false) == false) {
+            loadXml();
+        } else {
+            loadDatabase();
+        }
     }
 
     public QuotesDatabase getDatabase() {
@@ -98,6 +55,40 @@ public class App extends Application {
 
     public Quote getRandomQuote() {
         return randomQuote;
+    }
+
+    private void loadXml() {
+        QuotesXmlParser parser = new QuotesXmlParser(getApplicationContext());
+        List<Quote> quotesListFromXml = null;
+        try {
+            quotesListFromXml = parser.getQuotesListFromXml();
+            Log.d(App.this.getClass().getSimpleName(), "quotesListFromXml.size() = " + quotesListFromXml.size());
+        } catch (IOException | XmlPullParserException e) {
+            showAlertDialog(e.getClass().getSimpleName(), e.getMessage());
+        }
+
+        if (quotesListFromXml != null) {
+            database.quoteDao().insertAll(quotesListFromXml);
+            getSP().edit().putBoolean(KEY_XML_LOADED, true).apply();
+
+        }
+    }
+
+    private void loadDatabase() {
+        quotesList = App.get().getDatabase().quoteDao().getAll();
+        Log.d(App.this.getClass().getSimpleName(), "quotesList.size() = " + quotesList.size());
+
+        if (quotesList.size() > 0) {
+            randomQuote = quotesList.get(new Random().nextInt(quotesList.size()));
+        }
+
+    }
+
+    private void showAlertDialog(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.create().show();
     }
 
     private SharedPreferences getSP() {
