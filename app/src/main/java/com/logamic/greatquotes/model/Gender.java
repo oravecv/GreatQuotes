@@ -1,23 +1,25 @@
 package com.logamic.greatquotes.model;
 
-import android.arch.persistence.room.TypeConverter;
-
-/**
- * Created by oravecv on 01/09/18.
- */
+import com.logamic.greatquotes.R;
 
 public enum Gender {
-    MALE(0),
-    FEMALE(1),
-    NOT_DEFINED(2);
+    MALE(0, R.color.male_color),
+    FEMALE(1, R.color.female_color),
+    NOT_DEFINED(2, R.color.not_defined_color);
 
     private int code;
+    private int colorResourceId;
 
-    Gender(int code) {
+    Gender(int code, int colorResourceId) {
         this.code = code;
+        this.colorResourceId = colorResourceId;
     }
 
     public int getCode() {
         return code;
+    }
+
+    public int getColorResourceId() {
+        return colorResourceId;
     }
 }
