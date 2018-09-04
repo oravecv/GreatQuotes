@@ -3,6 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    
+    <color name="colorToolbarElements">#ffffff</color>
 
     <color name="male_color">#4073FF</color>
     <color name="female_color">#FF4081</color>

@@ -40,13 +40,12 @@ public class App extends Application {
     }
 
     public void loadData() {
-        database = Room.databaseBuilder(getApplicationContext(), QuotesDatabase.class, DATABASE_NAME).build();
 
         if (getSP().getBoolean(KEY_XML_LOADED, false) == false) {
             loadXml();
-        } else {
-            loadDatabase();
         }
+        loadDatabase();
+
     }
 
     public QuotesDatabase getDatabase() {
@@ -75,7 +74,7 @@ public class App extends Application {
     }
 
     private void loadDatabase() {
-        quotesList = App.get().getDatabase().quoteDao().getAll();
+        quotesList = getDatabase().quoteDao().getAll();
         Log.d(App.this.getClass().getSimpleName(), "quotesList.size() = " + quotesList.size());
 
         if (quotesList.size() > 0) {
@@ -95,4 +94,15 @@ public class App extends Application {
         return getSharedPreferences(PREFERENCES, MODE_PRIVATE);
     }
 
+    public List<Quote> getQuotesList() {
+        return quotesList;
+    }
+
+    public int getQuotesListSize() {
+        if (quotesList != null) {
+            return quotesList.size();
+        } else {
+            return 0;
+        }
+    }
 }

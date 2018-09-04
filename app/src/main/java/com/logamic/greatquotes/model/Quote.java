@@ -2,6 +2,7 @@ package com.logamic.greatquotes.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 
@@ -27,6 +28,8 @@ public class Quote {
     @ColumnInfo(name = "quote")
     private String quote;
 
+    @Ignore
+    private String author;
 
 
     public Quote(String firstName, String lastName, Gender gender, String quote) {
@@ -34,6 +37,8 @@ public class Quote {
         this.lastName = lastName;
         this.gender = gender;
         this.quote = quote;
+
+        this.author = firstName + " " + lastName;
     }
 
     public int getQuoteId() {
@@ -79,5 +84,9 @@ public class Quote {
     @Override
     public String toString() {
         return firstName + " " + lastName + " (" + gender + "): " + "'" + quote + "'";
+    }
+
+    public String getAuthor() {
+        return author;
     }
 }

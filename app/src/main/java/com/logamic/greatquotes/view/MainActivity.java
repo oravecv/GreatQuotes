@@ -3,6 +3,8 @@ package com.logamic.greatquotes.view;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.logamic.greatquotes.App;
@@ -11,8 +13,13 @@ import com.logamic.greatquotes.model.Quote;
 
 public class MainActivity extends AppCompatActivity {
 
+    Toolbar toolbar;
+    ListView quotesListView;
+    QuoteListAdapter quoteListAdapter;
+
     TextView randomQuoteTextView;
     TextView authorTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +28,14 @@ public class MainActivity extends AppCompatActivity {
 
         randomQuoteTextView = findViewById(R.id.quote_text_view);
         authorTextView = findViewById(R.id.author_text_view);
+
+        toolbar = findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+
+        quotesListView = findViewById(R.id.quotes_list);
+        quoteListAdapter = new QuoteListAdapter(this);
+        quotesListView.setAdapter(quoteListAdapter);
+
 
         if (App.get().getDatabase() == null) {
             new LoadDatabaseTask().execute();
@@ -39,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(Void result) {
             showRandomQuote();
+            quoteListAdapter.notifyDataSetChanged();
         }
     }
 
@@ -46,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         Quote randomQuote = App.get().getRandomQuote();
         if (randomQuote != null) {
             randomQuoteTextView.setText(randomQuote.getQuote());
-            authorTextView.setText(randomQuote.getFirstName() + " " + randomQuote.getLastName());
+            authorTextView.setText(randomQuote.getAuthor());
             authorTextView.setTextColor(getResources().getColor(randomQuote.getGender().getColorResourceId()));
         }
 
