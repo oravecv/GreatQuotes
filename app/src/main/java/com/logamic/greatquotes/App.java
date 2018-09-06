@@ -31,7 +31,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         INSTANCE = this;
     }
 
@@ -40,6 +39,7 @@ public class App extends Application {
     }
 
     public void loadData() {
+        database = Room.databaseBuilder(getApplicationContext(), QuotesDatabase.class, DATABASE_NAME).build();
 
         if (getSP().getBoolean(KEY_XML_LOADED, false) == false) {
             loadXml();
