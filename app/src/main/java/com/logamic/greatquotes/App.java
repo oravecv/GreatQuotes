@@ -26,7 +26,8 @@ public class App extends Application {
 
     private QuotesDatabase database;
     private List<Quote> quotesList;
-    private Quote randomQuote;
+
+    private Quote currentQuote;
 
     @Override
     public void onCreate() {
@@ -52,9 +53,6 @@ public class App extends Application {
         return database;
     }
 
-    public Quote getRandomQuote() {
-        return randomQuote;
-    }
 
     private void loadXml() {
         QuotesXmlParser parser = new QuotesXmlParser(getApplicationContext());
@@ -78,7 +76,7 @@ public class App extends Application {
         Log.d(App.this.getClass().getSimpleName(), "quotesList.size() = " + quotesList.size());
 
         if (quotesList.size() > 0) {
-            randomQuote = quotesList.get(new Random().nextInt(quotesList.size()));
+            currentQuote = quotesList.get(new Random().nextInt(quotesList.size()));
         }
 
     }
@@ -92,6 +90,16 @@ public class App extends Application {
 
     private SharedPreferences getSP() {
         return getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+    }
+
+    public void selectCurrentQuote(int index) {
+        if (quotesList != null && index < quotesList.size()) {
+            currentQuote = quotesList.get(index);
+        }
+    }
+
+    public Quote getCurrentQuote() {
+        return currentQuote;
     }
 
     public List<Quote> getQuotesList() {

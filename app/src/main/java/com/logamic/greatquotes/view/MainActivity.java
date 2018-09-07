@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBar actionBar;
     private ActionBarDrawerToggle drawerToggle;
 
-    TextView randomQuoteTextView;
+    TextView quoteTextView;
     TextView authorTextView;
 
 
@@ -36,19 +37,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        randomQuoteTextView = findViewById(R.id.quote_text_view);
+        quoteTextView = findViewById(R.id.quote_text_view);
         authorTextView = findViewById(R.id.author_text_view);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
         quotesListView = findViewById(R.id.quotes_list);
         quoteListAdapter = new QuoteListAdapter(this);
         quotesListView.setAdapter(quoteListAdapter);
+        quotesListView.setOnItemClickListener(new OnQuotesListItemClickListener());
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
+        drawerLayout = findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerLayout.setDrawerListener(drawerToggle);
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         if (App.get().getDatabase() == null) {
             new LoadDatabaseTask().execute();
         } else {
-            showRandomQuote();
+            showCurrentQuote();
         }
     }
 
@@ -74,19 +76,26 @@ public class MainActivity extends AppCompatActivity {
        }
 
         protected void onPostExecute(Void result) {
-            showRandomQuote();
+            showCurrentQuote();
             quoteListAdapter.notifyDataSetChanged();
         }
     }
 
-    private void showRandomQuote() {
-        Quote randomQuote = App.get().getRandomQuote();
-        if (randomQuote != null) {
-            randomQuoteTextView.setText(randomQuote.getQuote());
-            authorTextView.setText(randomQuote.getAuthor());
-            authorTextView.setTextColor(getResources().getColor(randomQuote.getGender().getColorResourceId()));
-        }
+    private void showCurrentQuote() {
+        showQuote(App.get().getCurrentQuote());
+    }
 
+    private void showQuote(Quote quote) {
+        if (quote != null) {
+            quoteTextView.setText(quote.getQuote());
+            authorTextView.setText(quote.getAuthor());
+            authorTextView.setTextColor(getResources().getColor(quote.getGender().getColorResourceId()));
+        }
+    }
+
+    private void selectQuote(int index) {
+        App.get().selectCurrentQuote(index);
+        showCurrentQuote();
     }
 
     @Override
@@ -96,6 +105,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class OnQuotesListItemClickListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectQuote(position);
+        }
     }
 
     private class DrawerToggle extends ActionBarDrawerToggle {
@@ -109,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(MainActivity.this.getResources().getString(R.string.quotes));
             invalidateOptionsMenu();
         }
-        
+
         public void onDrawerClosed(View view) {
             super.onDrawerClosed(view);
             getSupportActionBar().setTitle(MainActivity.this.getResources().getString(R.string.app_name));

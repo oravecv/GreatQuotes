@@ -14,7 +14,8 @@ import android.arch.persistence.room.TypeConverters;
 public class Quote {
 
     @PrimaryKey(autoGenerate = true)
-    private int quoteId;
+    @ColumnInfo(name = "quote_id")
+    private long quoteId;
 
     @ColumnInfo(name = "first_name")
     private String firstName;
@@ -41,11 +42,11 @@ public class Quote {
         this.author = firstName + " " + lastName;
     }
 
-    public int getQuoteId() {
+    public long getQuoteId() {
         return quoteId;
     }
 
-    public void setQuoteId(int quoteId) {
+    public void setQuoteId(long quoteId) {
         this.quoteId = quoteId;
     }
 
