@@ -47,6 +47,12 @@ class QuoteListAdapter extends BaseAdapter {
 
         final Quote quote = App.get().getQuotesList().get(position);
 
+        if (quote == App.get().getCurrentQuote()) {
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.selected));
+        } else {
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.not_selected));
+        }
+
         TextView quoteTextView = (TextView) convertView.findViewById(R.id.quote_text);
         quoteTextView.setText(quote.getQuote());
 

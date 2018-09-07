@@ -76,7 +76,7 @@ public class App extends Application {
         Log.d(App.this.getClass().getSimpleName(), "quotesList.size() = " + quotesList.size());
 
         if (quotesList.size() > 0) {
-            currentQuote = quotesList.get(new Random().nextInt(quotesList.size()));
+            selectRandomQuote();
         }
 
     }
@@ -92,6 +92,15 @@ public class App extends Application {
         return getSharedPreferences(PREFERENCES, MODE_PRIVATE);
     }
 
+    public void selectRandomQuote() {
+        if (quotesList != null && quotesList.size() > 0) {
+            currentQuote = quotesList.get(new Random().nextInt(quotesList.size()));
+        } else {
+            currentQuote = null;
+        }
+
+    }
+
     public void selectCurrentQuote(int index) {
         if (quotesList != null && index < quotesList.size()) {
             currentQuote = quotesList.get(index);
@@ -100,6 +109,12 @@ public class App extends Application {
 
     public Quote getCurrentQuote() {
         return currentQuote;
+    }
+
+    public void deleteCurrentQuote() {
+        database.quoteDao().delete(currentQuote);
+        quotesList = database.quoteDao().getAll();
+        selectRandomQuote();
     }
 
     public List<Quote> getQuotesList() {
