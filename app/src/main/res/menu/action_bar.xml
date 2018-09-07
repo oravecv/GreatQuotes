@@ -5,10 +5,25 @@
     tools:context=".view.MainActivity">
 
     <item
+        android:id="@+id/action_add"
+        android:title="Add Quote"
+        android:icon="@android:drawable/ic_menu_add"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/action_edit"
+        android:title="Edit Quote"
+        android:icon="@android:drawable/ic_menu_edit"
+        app:showAsAction="always">
+    </item>
+
+    <item
         android:id="@+id/action_delete"
         android:title="Delete Quote"
         android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="always">
     </item>
+
 
 </menu>

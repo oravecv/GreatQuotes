@@ -1,6 +1,7 @@
 package com.logamic.greatquotes.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -64,10 +65,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh();
     }
 
     private class LoadDatabaseTask extends AsyncTask<Void, Void, Void> {
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
        }
 
         protected void onPostExecute(Void result) {
-            MainActivity.this.onPostExecute();
+            MainActivity.this.refresh();
         }
     }
 
@@ -90,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Void result) {
-            MainActivity.this.onPostExecute();
+            MainActivity.this.refresh();
         }
     }
 
-    private void onPostExecute() {
+    private void refresh() {
         showCurrentQuote();
         quoteListAdapter.notifyDataSetChanged();
         invalidateOptionsMenu();
@@ -133,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.action_bar, menu);
 
         menu.findItem(R.id.action_delete).setVisible(App.get().getCurrentQuote() != null);
+        menu.findItem(R.id.action_edit).setVisible(App.get().getCurrentQuote() != null);
 
         return true;
     }
@@ -146,6 +155,10 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_delete:
                 new DeleteCurrentQuoteTask().execute();
+                return true;
+            case R.id.action_add:
+                Intent intent = new Intent(this, AddActivity.class);
+                startActivity(intent);
                 return true;
         }
 
@@ -170,13 +183,13 @@ public class MainActivity extends AppCompatActivity {
 
         public void onDrawerOpened (View drawerView) {
             super.onDrawerOpened(drawerView);
-            getSupportActionBar().setTitle(MainActivity.this.getResources().getString(R.string.quotes));
+            //setTitle(MainActivity.this.getResources().getString(R.string.quotes));
             invalidateOptionsMenu();
         }
 
         public void onDrawerClosed(View view) {
             super.onDrawerClosed(view);
-            getSupportActionBar().setTitle(MainActivity.this.getResources().getString(R.string.app_name));
+            //setTitle(MainActivity.this.getResources().getString(R.string.app_name));
             invalidateOptionsMenu();
         }
     }

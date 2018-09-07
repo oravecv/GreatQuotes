@@ -1,6 +1,8 @@
 <resources>
 
-    <dimen name="default_margin">32dp</dimen>
+    <dimen name="default_margin">16dp</dimen>
+
     <dimen name="random_quote_text_size">18sp</dimen>
+    <dimen name="spinner_text_size">18sp</dimen>
 
 </resources>

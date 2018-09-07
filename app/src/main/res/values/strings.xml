@@ -1,9 +1,16 @@
 <resources>
     <string name="app_name">Great Quotes</string>
 
-    <string name="quotes">List of Quotes</string>
+    <string name="quotes">Quotes</string>
     <string name="drawer_open">Open list of quotes</string>
     <string name="drawer_close">Close list of quotes</string>
+
+    <!--Add Quote strings-->
+    <string name="title_add_activity">Add Quote</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="quote_text">Quote Text</string>
+    <string name="done">Done</string>
 
     <!--quotes.xml strings -->
     <string name="xml_root_element">quotes</string>
@@ -15,7 +22,7 @@
 
     <string name="xml_gender_male">Male</string>
     <string name="xml_gender_female">Female</string>
-
+    <string name="xml_gender_not_defined">Not Defined</string>
 
 
 </resources>

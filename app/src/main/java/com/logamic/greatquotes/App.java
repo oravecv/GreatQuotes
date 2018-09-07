@@ -128,4 +128,10 @@ public class App extends Application {
             return 0;
         }
     }
+
+    public void addQuote(Quote quote) {
+        database.quoteDao().insert(quote);
+        quotesList.add(quote);
+        currentQuote = quote;
+    }
 }

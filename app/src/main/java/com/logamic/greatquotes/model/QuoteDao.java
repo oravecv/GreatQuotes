@@ -26,4 +26,7 @@ public interface QuoteDao {
 
     @Delete
     void delete(Quote quote);
+
+    @Insert
+    void insert(Quote quote);
 }
