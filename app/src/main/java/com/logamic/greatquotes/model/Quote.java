@@ -29,17 +29,12 @@ public class Quote {
     @ColumnInfo(name = "quote")
     private String quote;
 
-    @Ignore
-    private String author;
-
 
     public Quote(String firstName, String lastName, Gender gender, String quote) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.quote = quote;
-
-        this.author = firstName + " " + lastName;
     }
 
     public long getQuoteId() {
@@ -88,6 +83,6 @@ public class Quote {
     }
 
     public String getAuthor() {
-        return author;
+        return firstName + " " + lastName;
     }
 }

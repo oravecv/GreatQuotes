@@ -4,51 +4,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.logamic.greatquotes.view.AddActivity">
+    tools:context="com.logamic.greatquotes.view.AddOrEditActivity">
 
 
     <EditText
         android:id="@+id/first_name_edit_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginLeft="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
-        android:ems="10"
+        android:layout_marginRight="@dimen/default_margin"
         android:inputType="textPersonName"
-        android:text="First Name"
-        android:selectAllOnFocus="true"/>
+        android:selectAllOnFocus="true"
+        android:text="First Name" />
 
     <EditText
         android:id="@+id/last_name_edit_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/first_name_edit_text"
         android:layout_below="@+id/first_name_edit_text"
-        android:ems="10"
+        android:layout_marginRight="@dimen/default_margin"
         android:inputType="textPersonName"
-        android:text="Last Name"
-        android:selectAllOnFocus="true"/>
+        android:selectAllOnFocus="true"
+        android:text="Last Name" />
 
     <Spinner
         android:id="@+id/gender_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/last_name_edit_text"
         android:layout_below="@+id/last_name_edit_text"
+        android:layout_marginRight="@dimen/default_margin"
         android:padding="4dp" />
 
     <EditText
         android:id="@+id/quote_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/done_button"
         android:layout_alignStart="@+id/gender_spinner"
         android:layout_below="@+id/gender_spinner"
-        android:ems="10"
-        android:inputType="text"
-        android:text="@string/quote_text"
-        android:selectAllOnFocus="true"/>
+        android:layout_marginRight="@dimen/default_margin"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        android:selectAllOnFocus="true"
+        android:text="@string/quote_text" />
 
     <Button
         android:id="@+id/done_button"

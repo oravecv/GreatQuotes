@@ -1,6 +1,8 @@
 package com.logamic.greatquotes.view;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.widget.DrawerLayout;
@@ -23,6 +25,8 @@ import com.logamic.greatquotes.model.Quote;
 
 public class MainActivity extends AppCompatActivity {
 
+
+
     private Toolbar toolbar;
     private ListView quotesListView;
     private DrawerLayout drawerLayout;
@@ -40,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTitle(R.string.quotes);
+
         quoteTextView = findViewById(R.id.quote_text_view);
         authorTextView = findViewById(R.id.author_text_view);
 
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerToggle.setDrawerIndicatorEnabled(true);
-        drawerLayout.setDrawerListener(drawerToggle);
+        drawerLayout.addDrawerListener(drawerToggle);
 
         if (App.get().getDatabase() == null) {
             new LoadDatabaseTask().execute();
@@ -154,11 +160,35 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.action_delete:
-                new DeleteCurrentQuoteTask().execute();
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                dialogBuilder.setTitle(getResources().getString(R.string.delete_title));
+                dialogBuilder.setMessage(getResources().getString(R.string.delete_message));
+                dialogBuilder.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new DeleteCurrentQuoteTask().execute();
+                        dialog.dismiss();
+                    }
+                });
+                dialogBuilder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                dialogBuilder.create().show();
                 return true;
+
             case R.id.action_add:
-                Intent intent = new Intent(this, AddActivity.class);
+                Intent intent = new Intent(this, AddOrEditActivity.class);
+                intent.putExtra(App.INTENT_EXTRA_ADD_EDIT, false);
                 startActivity(intent);
+                return true;
+
+            case R.id.action_edit:
+                Intent intent2 = new Intent(this, AddOrEditActivity.class);
+                intent2.putExtra(App.INTENT_EXTRA_ADD_EDIT, true);
+                startActivity(intent2);
                 return true;
         }
 
@@ -183,13 +213,11 @@ public class MainActivity extends AppCompatActivity {
 
         public void onDrawerOpened (View drawerView) {
             super.onDrawerOpened(drawerView);
-            //setTitle(MainActivity.this.getResources().getString(R.string.quotes));
             invalidateOptionsMenu();
         }
 
         public void onDrawerClosed(View view) {
             super.onDrawerClosed(view);
-            //setTitle(MainActivity.this.getResources().getString(R.string.app_name));
             invalidateOptionsMenu();
         }
     }

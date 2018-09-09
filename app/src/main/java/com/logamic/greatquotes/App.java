@@ -3,6 +3,7 @@ package com.logamic.greatquotes;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -21,6 +22,8 @@ public class App extends Application {
 
     private static final String PREFERENCES = "RoomDemo.preferences";
     private static final String KEY_XML_LOADED = "xml_loaded";
+
+    public static final String INTENT_EXTRA_ADD_EDIT = "ADD_TRUE_EDIT_FALSE";
 
     private static final String DATABASE_NAME = "QUOTES_DATABASE";
 
@@ -61,7 +64,7 @@ public class App extends Application {
             quotesListFromXml = parser.getQuotesListFromXml();
             Log.d(App.this.getClass().getSimpleName(), "quotesListFromXml.size() = " + quotesListFromXml.size());
         } catch (IOException | XmlPullParserException e) {
-            showAlertDialog(e.getClass().getSimpleName(), e.getMessage());
+            showAlertDialog(this, e.getClass().getSimpleName(), e.getMessage());
         }
 
         if (quotesListFromXml != null) {
@@ -81,8 +84,8 @@ public class App extends Application {
 
     }
 
-    private void showAlertDialog(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    public static void showAlertDialog(Context context, String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
         builder.setMessage(message);
         builder.create().show();
@@ -111,12 +114,6 @@ public class App extends Application {
         return currentQuote;
     }
 
-    public void deleteCurrentQuote() {
-        database.quoteDao().delete(currentQuote);
-        quotesList = database.quoteDao().getAll();
-        selectRandomQuote();
-    }
-
     public List<Quote> getQuotesList() {
         return quotesList;
     }
@@ -129,9 +126,20 @@ public class App extends Application {
         }
     }
 
+    public void deleteCurrentQuote() {
+        database.quoteDao().delete(currentQuote);
+        quotesList.remove(currentQuote);
+        selectRandomQuote();
+    }
+
     public void addQuote(Quote quote) {
         database.quoteDao().insert(quote);
         quotesList.add(quote);
         currentQuote = quote;
+    }
+
+
+    public void updateQuote(Quote quote) {
+        database.quoteDao().update(quote);
     }
 }
